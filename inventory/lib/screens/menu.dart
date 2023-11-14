@@ -1,63 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:inventory/widgets/left_drawer.dart';
+import 'package:inventory/widgets/card.dart';
 
-class Item {
+class ItemCard {
   final String name;
   final IconData icon;
   final Color color;
 
-  Item(this.name, this.icon, this.color);
-}
-class Card extends StatelessWidget {
-  final Item item;
-
-  const Card(this.item, {super.key}); // Constructor
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: item.color,
-      child: InkWell(
-        // Area responsive terhadap sentuhan
-        onTap: () {
-          // Memunculkan SnackBar ketika diklik
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!")));
-        },
-        child: Container(
-          // Container untuk menyimpan Icon dan Text
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  ItemCard(this.name, this.icon, this.color);
 }
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
-  final List<Item> items = [
-    Item("See Game Inventory", Icons.list_alt_rounded, Colors.blue),
-    Item("Add New Game ", Icons.library_add_rounded, Colors.green),
-    Item("Logout", Icons.logout, Colors.red),
+  final List<ItemCard> items = [
+    ItemCard("See Game Inventory", Icons.list_alt_rounded, Colors.blue),
+    ItemCard("Add New Game", Icons.library_add_rounded, Colors.green),
+    ItemCard("Logout", Icons.logout, Colors.red),
 ];
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -74,7 +32,11 @@ class MyHomePage extends StatelessWidget {
         title: const Text(
           'Game Inventory',
         ),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
       ),
+      // Masukkan drawer sebagai parameter nilai drawer dari widget Scaffold
+      drawer: const LeftDrawer(),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
@@ -103,9 +65,9 @@ class MyHomePage extends StatelessWidget {
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                children: items.map((Item item) {
+                children: items.map((ItemCard item) {
                   // Iterasi untuk setiap item
-                  return Card(item);
+                  return InventoryCard(item);
                 }).toList(),
               ),
             ],
