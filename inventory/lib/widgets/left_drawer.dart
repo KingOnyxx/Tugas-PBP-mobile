@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:inventory/screens/list_inventory.dart';
+import 'package:inventory/screens/login.dart';
 import 'package:inventory/screens/menu.dart';
 import 'package:inventory/screens/form.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Drawer(
       child: ListView(
         children: [
@@ -58,7 +62,7 @@ class LeftDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ListInventory(),
+                    builder: (context) => const InventoryPage(),
                   ));
             },
           ),
@@ -73,7 +77,35 @@ class LeftDrawer extends StatelessWidget {
             );
             },
           ),
-          
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            // Bagian redirection ke LoginPage
+            onTap: () async {
+              final response = await request.logout(
+                "http://clarence-grady-tugas.pbp.cs.ui.ac.id/auth/logout/");
+                String message = response["message"];
+                if (response['status']) {
+                  String uname = response["username"];
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("$message Sampai jumpa, $uname."),
+                  ));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("$message"),
+                  ));
+                }
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ));
+                },
+              )
         ],
       ),
     );

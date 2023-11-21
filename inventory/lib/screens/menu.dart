@@ -36,7 +36,7 @@ class MyHomePage extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       // Masukkan drawer sebagai parameter nilai drawer dari widget Scaffold
-      drawer: const LeftDrawer(),
+      endDrawer: const LeftDrawer(),
       body: SingleChildScrollView(
         // Widget wrapper yang dapat discroll
         child: Padding(
